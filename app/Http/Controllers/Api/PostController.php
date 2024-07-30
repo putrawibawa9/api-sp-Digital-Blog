@@ -14,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         //get all posts
-        $posts = Post::with('user')->paginate(5);
+        $posts = Post::with('user')->latest()->paginate(6);
         // $posts['author'] = Post::with('user')->get();
 
         //return collection of posts as a resource
@@ -26,17 +26,7 @@ class PostController extends Controller
     }
 
      public function store(Request $request)
-    {
-        // Notification system in Telegram
-        $telegramBotToken = env('TELEGRAM_BOT_TOKEN');
-        $chatId = env('TELEGRAM_CHAT_ID');
-        $message = "New post created by " . auth()->user()->name . " with title =" . $request->title;
-
-        Http::get("https://api.telegram.org/bot{$telegramBotToken}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $message,
-        ]);
-        
+    {       
         //define validation rules
         $validator = Validator::make($request->all(), [
         'title'       => 'required|string|max:255',
