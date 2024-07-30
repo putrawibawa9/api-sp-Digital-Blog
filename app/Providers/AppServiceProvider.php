@@ -29,12 +29,16 @@ class AppServiceProvider extends ServiceProvider
 
         // Listen to a new User Register
         User::created(function ($user) use ($telegramService) {
-            $telegramService->sendMessage("User baru telah terdaftar dengan nama *". $user['username'] . "*");
+            $telegramService->sendMessage("User baru telah terdaftar dengan nama *". $user['name'] . "*");
         });
 
         // Listen to a new issued token
         PersonalAccessToken::created(function ($token) use ($telegramService) {
-            $telegramService->sendMessage("Token baru telah dibuat oleh *". Auth::user()['username'] . "*");
+            $telegramService->sendMessage("Token baru telah dibuat oleh *". Auth::user()['name'] . "*");
+        });
+
+        PersonalAccessToken::deleted(function ($token) use ($telegramService) {
+            $telegramService->sendMessage("Token telah dihapus oleh *". Auth::user()['name'] . "*");
         });
 
 
@@ -43,18 +47,18 @@ class AppServiceProvider extends ServiceProvider
         Post::created(function ($post) use ($telegramService) {
              // Eager load the user relationship to avoid N+1 problem
             $user = Auth::user();
-            $telegramService->sendMessage("Judul baru ditambahkan oleh *". Auth::user()['username'] . "* dengan judul " . "*". $post['title']."*");
+            $telegramService->sendMessage("Judul baru ditambahkan oleh *". Auth::user()['name'] . "* dengan judul " . "*". $post['title']."*");
         });
 
         // Listen to the updated event
         Post::updated(function ($post) use ($telegramService) {
-            $telegramService->sendMessage("Judul telah diubah oleh *". Auth::user()['username'] . "* dengan judul " . "*". $post['title']."*");
+            $telegramService->sendMessage("Judul telah diubah oleh *". Auth::user()['name'] . "* dengan judul " . "*". $post['title']."*");
         });
 
         // Listen to the deleted event
         Post::deleted(function ($post) use ($telegramService) {
             // $user =Auth::user();
-            $telegramService->sendMessage("Post with title *" . $post->title . "* has been deleted by *".  Auth::user()['username']."*");
+            $telegramService->sendMessage("Post with title *" . $post->title . "* has been deleted by *".  Auth::user()['name']."*");
         });
     }
 }
