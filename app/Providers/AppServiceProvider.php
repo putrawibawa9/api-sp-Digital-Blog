@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use App\Services\TelegramNotificationService;
+use Laravel\Sanctum\PersonalAccessToken;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $telegramService = app(TelegramNotificationService::class);
+
+        // Listen to a new User Register
+        User::created(function ($user) use ($telegramService) {
+            $telegramService->sendMessage("User baru telah terdaftar dengan nama *". $user['username'] . "*");
+        });
+
+        // Listen to a new issued token
+        PersonalAccessToken::created(function ($token) use ($telegramService) {
+            $telegramService->sendMessage("Token baru telah dibuat oleh *". Auth::user()['username'] . "*");
+        });
+
+
 
         // Listen to the created event
         Post::created(function ($post) use ($telegramService) {

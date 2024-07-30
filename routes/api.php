@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TelegramController;
 use App\Http\Middleware\NotificationMiddleware;
 
-Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register'])->middleware(NotificationMiddleware::class);
+Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 
 Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
