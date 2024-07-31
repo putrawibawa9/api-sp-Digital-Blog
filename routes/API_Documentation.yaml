@@ -8,7 +8,7 @@ servers:
     description: Local server
 
 paths:
-  /auth/login:
+  /v1/auth/login:
     post:
       summary: User login
       requestBody:
@@ -35,7 +35,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /auth/register:
+  v1/auth/register:
     post:
       summary: User registration
       requestBody:
@@ -59,7 +59,7 @@ paths:
         '400':
           description: Invalid input
 
-  /posts:
+  /v1/posts:
     get:
       summary: Get all posts
       security:
@@ -88,7 +88,7 @@ paths:
         '201':
           description: Post created successfully
 
-  /posts/{id}:
+  /v1/posts/{id}:
     get:
       summary: Get a single post
       security:
